@@ -1,9 +1,3 @@
-const todos = async() => {
-  // eslint-disable-next-line
-  const dataPromise = await fetch('https://jsonplaceholder.typicode.com/todos');
-  const data = await dataPromise.json();
+const todosApi = 'https://jsonplaceholder.typicode.com/todos';
 
-  return data;
-};
-
-export default todos;
+export default todosApi;

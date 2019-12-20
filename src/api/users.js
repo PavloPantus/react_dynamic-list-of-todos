@@ -1,8 +1,3 @@
-const users = async() => {
-  const dataPromise = await fetch('https://jsonplaceholder.typicode.com/users');
-  const data = await dataPromise.json();
+const usersApi = 'https://jsonplaceholder.typicode.com/users';
 
-  return data;
-};
-
-export default users;
+export default usersApi;

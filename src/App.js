@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import './App.scss';
 
-import todos from './api/todos';
-import users from './api/users';
+import todosApi from './api/todos';
+import usersApi from './api/users';
 
 import TodoList from './TodoList';
 
@@ -10,29 +10,32 @@ function App() {
   const [arrayOfTodos, setArrayOfTodos] = useState([]);
   const [loading, setLoading] = useState(false);
   const [loaded, setLoadStatus] = useState(false);
+  const [activeFilter, setActiveFilter] = useState(' ');
 
-  const loadTodosWithUsers = () => {
+  const loadTodosWithUsers = async() => {
     setLoading(true);
 
-    todos()
-      .then(
-        (todosFromServer) => {
-          users().then(
-            (myUsers) => {
-              const todosWithUsersFromServer = todosFromServer.map(
-                todo => ({
-                  ...todo,
-                  user: myUsers.find(user => user.id === todo.userId),
-                })
-              );
+    const getDataFromApi = async(api) => {
+      const dataPromise = await fetch(api);
 
-              setArrayOfTodos(todosWithUsersFromServer);
-              setLoading(false);
-              setLoadStatus(true);
-            }
-          );
-        }
-      );
+      return dataPromise.json();
+    };
+    const [arrayOfTodosFromServer, arrayOfUsers] = await Promise.all(
+      [getDataFromApi(todosApi), getDataFromApi(usersApi)]
+    );
+
+    const todosWithUsersFromServer = arrayOfTodosFromServer.map(
+      todo => ({
+        ...todo,
+        user: arrayOfUsers.find(
+          user => user.id === todo.userId
+        ),
+      })
+    );
+
+    setArrayOfTodos(todosWithUsersFromServer);
+    setLoading(false);
+    setLoadStatus(true);
   };
 
   return (
@@ -57,6 +60,8 @@ function App() {
           <TodoList
             setArrayOfTodos={setArrayOfTodos}
             arrayOfTodos={arrayOfTodos}
+            setActiveFilter={setActiveFilter}
+            activeFilter={activeFilter}
           />
         )
       }

@@ -2,16 +2,56 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import TodoItem from './TodoItem';
 
-const TodoList = ({ arrayOfTodos, setArrayOfTodos }) => {
-  const sortByTitle = todos => [...todos]
-    .sort((todo1, todo2) => todo1.title.localeCompare(todo2.title));
+const TodoList = (
+  { arrayOfTodos,
+    setArrayOfTodos,
+    setActiveFilter,
+    activeFilter }
+) => {
+  const sortByTitle = (todos) => {
+    const sorted = [...todos]
+      .sort((todo1, todo2) => (
+        todo1.title.localeCompare(todo2.title)
+      ));
 
-  const sortByUserName = todos => [...todos]
-    .sort((todo1, todo2) => todo1.user.name.localeCompare(todo2.user.name));
+    if (activeFilter !== 'sortByTitle') {
+      setActiveFilter('sortByTitle');
 
-  const sortByStatus = todos => [...todos]
-    .filter(todo => todo.completed)
-    .concat(todos.filter(todo => !todo.completed));
+      return sorted;
+    }
+    setActiveFilter(' ');
+
+    return sorted.reverse();
+  };
+
+  const sortByUserName = (todos) => {
+    const sorted = [...todos]
+      .sort((todo1, todo2) => todo1.user.name.localeCompare(todo2.user.name));
+
+    if (activeFilter === 'sortByUserName') {
+      setActiveFilter('');
+
+      return sorted;
+    }
+    setActiveFilter('sortByUserName');
+
+    return sorted.reverse();
+  };
+
+  const sortByStatus = (todos) => {
+    const sorted = [...todos]
+      .filter(todo => todo.completed)
+      .concat(todos.filter(todo => !todo.completed));
+
+    if (activeFilter === 'sortByStatus') {
+      setActiveFilter('');
+
+      return sorted;
+    }
+    setActiveFilter('sortByStatus');
+
+    return sorted.reverse();
+  };
 
   return (
     <>
@@ -85,6 +125,8 @@ TodoList.propTypes = {
     }),
   ).isRequired,
   setArrayOfTodos: PropTypes.func.isRequired,
+  setActiveFilter: PropTypes.func.isRequired,
+  activeFilter: PropTypes.string.isRequired,
 };
 
 export default TodoList;
