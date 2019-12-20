@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import './App.scss';
 
-import todosApi from './api/todos';
-import usersApi from './api/users';
+import todosURL from './api/todos';
+import usersURL from './api/users';
 
 import TodoList from './TodoList';
+import GetDataFromApi from './api/GetDataFromApi';
 
 function App() {
   const [arrayOfTodos, setArrayOfTodos] = useState([]);
@@ -15,13 +16,8 @@ function App() {
   const loadTodosWithUsers = async() => {
     setLoading(true);
 
-    const getDataFromApi = async(api) => {
-      const dataPromise = await fetch(api);
-
-      return dataPromise.json();
-    };
     const [arrayOfTodosFromServer, arrayOfUsers] = await Promise.all(
-      [getDataFromApi(todosApi), getDataFromApi(usersApi)]
+      [GetDataFromApi(todosURL), GetDataFromApi(usersURL)]
     );
 
     const todosWithUsersFromServer = arrayOfTodosFromServer.map(

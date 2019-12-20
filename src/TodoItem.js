@@ -20,7 +20,7 @@ completed
 TodoItem.propTypes = {
   todo: PropTypes.shape(
     {
-      userId: PropTypes.string,
+      userId: PropTypes.number,
       id: PropTypes.number,
       title: PropTypes.string,
       completed: PropTypes.bool,

@@ -40,8 +40,9 @@ const TodoList = (
 
   const sortByStatus = (todos) => {
     const sorted = [...todos]
-      .filter(todo => todo.completed)
-      .concat(todos.filter(todo => !todo.completed));
+      .sort((a, b) => a.completed - b.completed);
+      /* .filter(todo => todo.completed)
+      .concat(todos.filter(todo => !todo.completed)); */
 
     if (activeFilter === 'sortByStatus') {
       setActiveFilter('');
@@ -101,7 +102,7 @@ TodoList.propTypes = {
   arrayOfTodos: PropTypes.arrayOf(
     PropTypes.shape({
 
-      userId: PropTypes.string,
+      userId: PropTypes.number,
       id: PropTypes.number,
       title: PropTypes.string,
       completed: PropTypes.bool,

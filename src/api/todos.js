@@ -1,3 +1,3 @@
-const todosApi = 'https://jsonplaceholder.typicode.com/todos';
+const todosURL = 'https://jsonplaceholder.typicode.com/todos';
 
-export default todosApi;
+export default todosURL;
