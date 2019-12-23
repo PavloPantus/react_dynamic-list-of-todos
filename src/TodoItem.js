@@ -27,18 +27,9 @@ TodoItem.propTypes = {
       user: PropTypes.shape({
         id: PropTypes.number,
         name: PropTypes.string,
-        username: PropTypes.string,
+
         email: PropTypes.string,
-        address: PropTypes.shape({
-          street: PropTypes.string,
-          suite: PropTypes.string,
-          city: PropTypes.string,
-          zipcode: PropTypes.string,
-          geo: PropTypes.shape({
-            lat: PropTypes.string,
-            lng: PropTypes.string,
-          }),
-        }),
+
       }),
     }
   ).isRequired,

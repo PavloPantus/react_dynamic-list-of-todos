@@ -11,7 +11,7 @@ function App() {
   const [arrayOfTodos, setArrayOfTodos] = useState([]);
   const [loading, setLoading] = useState(false);
   const [loaded, setLoadStatus] = useState(false);
-  const [activeFilter, setActiveFilter] = useState(' ');
+  const [activeSort, setActiveSort] = useState(' ');
 
   const loadTodosWithUsers = async() => {
     setLoading(true);
@@ -56,8 +56,8 @@ function App() {
           <TodoList
             setArrayOfTodos={setArrayOfTodos}
             arrayOfTodos={arrayOfTodos}
-            setActiveFilter={setActiveFilter}
-            activeFilter={activeFilter}
+            setActiveSort={setActiveSort}
+            activeSort={activeSort}
           />
         )
       }

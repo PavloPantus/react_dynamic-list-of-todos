@@ -5,61 +5,51 @@ import TodoItem from './TodoItem';
 const TodoList = (
   { arrayOfTodos,
     setArrayOfTodos,
-    setActiveFilter,
-    activeFilter }
+    setActiveSort,
+    activeSort }
 ) => {
-  const sortByTitle = (todos) => {
-    const sorted = [...todos]
-      .sort((todo1, todo2) => (
-        todo1.title.localeCompare(todo2.title)
-      ));
+  const sortTableBy = (column, typeOfSortedItems) => {
+    const getSortMethod = (newColumn, newTypeOfSortedItems) => {
+      const getDataByRoute = (obj, str) => {
+        const route = str.split('.')
+          .reduce((objValue, partOfRoute) => objValue[partOfRoute], obj);
 
-    if (activeFilter !== 'sortByTitle') {
-      setActiveFilter('sortByTitle');
+        return route;
+      };
 
-      return sorted;
-    }
-    setActiveFilter(' ');
+      if (newTypeOfSortedItems === 'string') {
+        return (a, b) => getDataByRoute(a, newColumn)
+          .localeCompare(getDataByRoute(b, newColumn));
+      }
 
-    return sorted.reverse();
-  };
+      if (newTypeOfSortedItems === 'boolean'
+        || newTypeOfSortedItems === 'number') {
+        return (a, b) => (
+          getDataByRoute(a, newColumn) - getDataByRoute(b, newColumn)
+        );
+      }
 
-  const sortByUserName = (todos) => {
-    const sorted = [...todos]
-      .sort((todo1, todo2) => todo1.user.name.localeCompare(todo2.user.name));
+      return undefined;
+    };
 
-    if (activeFilter === 'sortByUserName') {
-      setActiveFilter('');
+    const sorted = [...arrayOfTodos]
+      .sort(getSortMethod(column, typeOfSortedItems));
 
-      return sorted;
-    }
-    setActiveFilter('sortByUserName');
-
-    return sorted.reverse();
-  };
-
-  const sortByStatus = (todos) => {
-    const sorted = [...todos]
-      .sort((a, b) => a.completed - b.completed);
-      /* .filter(todo => todo.completed)
-      .concat(todos.filter(todo => !todo.completed)); */
-
-    if (activeFilter === 'sortByStatus') {
-      setActiveFilter('');
+    if (activeSort !== column) {
+      setActiveSort(column);
 
       return sorted;
     }
-    setActiveFilter('sortByStatus');
+    setActiveSort(' ');
 
     return sorted.reverse();
   };
 
   return (
     <>
-
       <button
         onClick={() => {
-          setArrayOfTodos(sortByTitle(arrayOfTodos));
+          setArrayOfTodos(sortTableBy('title', 'string'));
         }}
         className="button_sort"
         type="button"
@@ -69,7 +59,7 @@ const TodoList = (
 
       <button
         onClick={() => {
-          setArrayOfTodos(sortByUserName(arrayOfTodos));
+          setArrayOfTodos(sortTableBy('user.name', 'string'));
         }}
         className="button_sort"
         type="button"
@@ -79,7 +69,7 @@ const TodoList = (
 
       <button
         onClick={() => {
-          setArrayOfTodos(sortByStatus(arrayOfTodos));
+          setArrayOfTodos(sortTableBy('completed', 'boolean'));
         }}
         className="button_sort"
         type="button"
@@ -109,25 +99,16 @@ TodoList.propTypes = {
       user: PropTypes.shape({
         id: PropTypes.number,
         name: PropTypes.string,
-        username: PropTypes.string,
+
         email: PropTypes.string,
-        address: PropTypes.shape({
-          street: PropTypes.string,
-          suite: PropTypes.string,
-          city: PropTypes.string,
-          zipcode: PropTypes.string,
-          geo: PropTypes.shape({
-            lat: PropTypes.string,
-            lng: PropTypes.string,
-          }),
-        }),
+
       }),
 
     }),
   ).isRequired,
   setArrayOfTodos: PropTypes.func.isRequired,
-  setActiveFilter: PropTypes.func.isRequired,
-  activeFilter: PropTypes.string.isRequired,
+  setActiveSort: PropTypes.func.isRequired,
+  activeSort: PropTypes.string.isRequired,
 };
 
 export default TodoList;
